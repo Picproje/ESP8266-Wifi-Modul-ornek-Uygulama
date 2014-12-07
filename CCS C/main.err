@@ -1,0 +1,4 @@
+>>> Warning 203 "D:\User Files\Projects\Esp Wireless Module\Ccs\Esp8266.c" Line 193(1,1): Condition always TRUE
+*** Error 74 "main.c" Line 31(0,1): Not enough RAM for all variables
+      1 Errors,  1 Warnings.
+Build Failed.

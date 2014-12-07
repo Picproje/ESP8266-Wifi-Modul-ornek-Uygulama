@@ -1,0 +1,104 @@
+ na     ESP8266Buf
+ na     strstr.@SCRATCH1
+ na     Clear_ESPBuffer.@SCRATCH2
+ na     ESP8266_Init.@SCRATCH2
+ na     @PSTRINGC7_115200_62_63.@SCRATCH4
+ na     @PSTRINGC7_68.@SCRATCH4
+ na     @PSTRINGCN7_115200_62_63.@SCRATCH4
+ na     @PSTRINGR_115200_62_63.@SCRATCH2
+004-005 @READ_PROGRAM_MEMORY8.P1
+004-005 @WRITE_PROGRAM_MEMORY8.P2
+008     PSP_DATA
+015     CCP_1
+015     CCP_1_LOW
+016     CCP_1_HIGH
+01B     CCP_2_LOW
+01B     CCP_2
+01C     CCP_2_HIGH
+020     @INTERRUPT_AREA
+021     @INTERRUPT_AREA
+022     @INTERRUPT_AREA
+023     @INTERRUPT_AREA
+024     @INTERRUPT_AREA
+025     @INTERRUPT_AREA
+026     @INTERRUPT_AREA
+027     @TRIS_C
+028-029 strtok.save
+02A-043 Network_User_Pass
+044-045 ESPWriteIndex
+046     ESP8266_Init.ESPInitCase
+077     @SCRATCH
+078     @SCRATCH
+079     @SCRATCH
+07A     @SCRATCH
+07F     @INTERRUPT_AREA
+09C.6   C1OUT
+09C.7   C2OUT
+0FF     @INTERRUPT_AREA
+10D-10E @WRITE_PROGRAM_MEMORY8.P1
+10D-10E @READ_PROGRAM_MEMORY8.P2
+17F     @INTERRUPT_AREA
+1FF     @INTERRUPT_AREA
+27F     @INTERRUPT_AREA
+2FF     @INTERRUPT_AREA
+37F     @INTERRUPT_AREA
+3FF     @INTERRUPT_AREA
+47F     @INTERRUPT_AREA
+4FF     @INTERRUPT_AREA
+57F     @INTERRUPT_AREA
+5FF     @INTERRUPT_AREA
+67F     @INTERRUPT_AREA
+6FF     @INTERRUPT_AREA
+77F     @INTERRUPT_AREA
+7FF     @INTERRUPT_AREA
+87F     @INTERRUPT_AREA
+8FF     @INTERRUPT_AREA
+97F     @INTERRUPT_AREA
+9FF     @INTERRUPT_AREA
+A7F     @INTERRUPT_AREA
+AFF     @INTERRUPT_AREA
+B7F     @INTERRUPT_AREA
+BFF     @INTERRUPT_AREA
+C7F     @INTERRUPT_AREA
+CFF     @INTERRUPT_AREA
+D7F     @INTERRUPT_AREA
+DFF     @INTERRUPT_AREA
+E7F     @INTERRUPT_AREA
+EFF     @INTERRUPT_AREA
+F7F     @INTERRUPT_AREA
+FFF     @INTERRUPT_AREA
+
+*** na indicates variables that would not fit into memory
+
+ROM Allocation:
+
+Project Directory:
+    D:\User Files\Projects\Esp Wireless Module\Ccs\
+
+Project Files:
+    main.c                                                  [26-Kas-14 22:56  CRC=0DDA9E8E]
+    main.h                                                  [26-Kas-14 22:56  CRC=4F29043B]
+    ..\..\..\..\System Files\Program Files\PICC\devices\16F877A.h [30-Kas-12 18:59  CRC=0E6649F1]
+    ..\..\..\..\System Files\Program Files\PICC\drivers\string.h [14-Tem-11 10:13  CRC=23EDEC8F]
+    ..\..\..\..\System Files\Program Files\PICC\drivers\stddef.h [16-Tem-10 09:27  CRC=897CEC6C]
+    ..\..\..\..\System Files\Program Files\PICC\drivers\ctype.h [03-Oca-08 13:55  CRC=2D1F019F]
+    Esp8266.c                                               [26-Kas-14 22:56  CRC=79780BA9]
+    Typedefs.h                                              [26-Kas-14 22:07  CRC=D872A938]
+
+Source signature=7051256D
+
+Units:
+    main (main)
+
+Compiler Settings:
+    Processor:      PIC16F877A
+    Pointer Size:   16
+    ADC Range:      0-65535
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+
+Output Files:
+    Errors:      main.err
+    Ext Symbols: main.esym
+    Symbols:     main.sym

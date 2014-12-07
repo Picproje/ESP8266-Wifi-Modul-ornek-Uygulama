@@ -1,0 +1,1723 @@
+CCS PCH C Compiler, Version 4.140, 5376               26-Kas-14 22:50
+
+               Filename:   D:\User Files\Projects\Esp Wireless Module\Ccs\main.lst
+
+               ROM used:   2790 bytes (9%)
+                           Largest free fragment is 29974
+               RAM used:   556 (36%) at main() level
+                           575 (37%) worst case
+               Stack:     4 worst case (3 in main + 1 for interrupts)
+
+*
+0000:  GOTO   0A2E
+*
+0008:  MOVWF  04
+000A:  MOVFF  FD8,05
+000E:  MOVFF  FE0,06
+0012:  MOVLB  0
+0014:  MOVFF  FE9,0C
+0018:  MOVFF  FEA,07
+001C:  MOVFF  FE1,08
+0020:  MOVFF  FE2,09
+0024:  MOVFF  FD9,0A
+0028:  MOVFF  FDA,0B
+002C:  MOVFF  FF3,12
+0030:  MOVFF  FF4,13
+0034:  MOVFF  FFA,14
+0038:  MOVFF  FF5,15
+003C:  MOVFF  FF6,16
+0040:  MOVFF  FF7,17
+0044:  MOVFF  00,0E
+0048:  MOVFF  01,0F
+004C:  MOVFF  02,10
+0050:  MOVFF  03,11
+0054:  BTFSS  F9D.5
+0056:  GOTO   0060
+005A:  BTFSC  F9E.5
+005C:  GOTO   02CA
+0060:  MOVFF  0E,00
+0064:  MOVFF  0F,01
+0068:  MOVFF  10,02
+006C:  MOVFF  11,03
+0070:  MOVFF  0C,FE9
+0074:  MOVFF  07,FEA
+0078:  BSF    07.7
+007A:  MOVFF  08,FE1
+007E:  MOVFF  09,FE2
+0082:  MOVFF  0A,FD9
+0086:  MOVFF  0B,FDA
+008A:  MOVFF  12,FF3
+008E:  MOVFF  13,FF4
+0092:  MOVFF  14,FFA
+0096:  MOVFF  15,FF5
+009A:  MOVFF  16,FF6
+009E:  MOVFF  17,FF7
+00A2:  MOVF   04,W
+00A4:  MOVFF  06,FE0
+00A8:  MOVFF  05,FD8
+00AC:  RETFIE 0
+.................... #include <main.h> 
+.................... #include <18F4520.h> 
+.................... //////// Standard Header file for the PIC18F4520 device //////////////// 
+.................... #device PIC18F4520 
+.................... #list 
+....................  
+.................... #device adc=16 
+....................  
+.................... #FUSES NOWDT                    //No Watch Dog Timer 
+.................... #FUSES WDT128                   //Watch Dog Timer uses 1:128 Postscale 
+.................... #FUSES XT                       //Crystal osc <= 4mhz for PCM/PCH , 3mhz to 10 mhz for PCD 
+.................... #FUSES NOBROWNOUT               //No brownout reset 
+.................... #FUSES NOPBADEN                 //PORTB pins are configured as digital I/O on RESET 
+.................... #FUSES NOLPT1OSC                //Timer1 configured for higher power operation 
+.................... #FUSES NOLVP                    //No low voltage prgming, B3(PIC16) or B5(PIC18) used for I/O 
+.................... #FUSES NOXINST                  //Extended set extension and Indexed Addressing mode disabled (Legacy mode) 
+....................  
+.................... #use delay(clock=8000000) 
+*
+030A:  MOVLW  02
+030C:  MOVWF  FEA
+030E:  MOVLW  37
+0310:  MOVWF  FE9
+0312:  MOVF   FEF,W
+0314:  BZ    0330
+0316:  MOVLW  02
+0318:  MOVWF  01
+031A:  CLRF   00
+031C:  DECFSZ 00,F
+031E:  BRA    031C
+0320:  DECFSZ 01,F
+0322:  BRA    031A
+0324:  MOVLW  97
+0326:  MOVWF  00
+0328:  DECFSZ 00,F
+032A:  BRA    0328
+032C:  DECFSZ FEF,F
+032E:  BRA    0316
+0330:  RETURN 0
+....................  
+.................... #use FIXED_IO( B_outputs=PIN_B2 ) 
+.................... #use rs232(baud=115200,parity=N,xmit=PIN_C6,rcv=PIN_C7,bits=8,stream=USART1) 
+.................... #use rs232(baud=115200,parity=N,xmit=PIN_C5,           bits=8,stream=USART2) 
+*
+03F2:  BCF    F94.5
+03F4:  BCF    F8B.5
+03F6:  MOVLW  08
+03F8:  MOVWF  01
+03FA:  BRA    03FC
+03FC:  NOP   
+03FE:  BSF    01.7
+0400:  BRA    0434
+0402:  BCF    01.7
+0404:  MOVLB  2
+0406:  MOVF   x38,W
+0408:  MOVWF  02
+040A:  RRCF   02,F
+040C:  MOVLB  0
+040E:  BTFSC  FD8.0
+0410:  BSF    F8B.5
+0412:  BTFSS  FD8.0
+0414:  BCF    F8B.5
+0416:  BSF    01.6
+0418:  BRA    0434
+041A:  BCF    01.6
+041C:  DECFSZ 01,F
+041E:  BRA    0422
+0420:  BRA    0426
+0422:  MOVLB  2
+0424:  BRA    040A
+0426:  MOVF   02,W
+0428:  MOVLB  2
+042A:  MOVWF  x38
+042C:  BRA    042E
+042E:  NOP   
+0430:  BSF    F8B.5
+0432:  MOVLB  0
+0434:  BTFSC  01.7
+0436:  BRA    0402
+0438:  BTFSC  01.6
+043A:  BRA    041A
+043C:  RETURN 0
+....................  
+....................  
+.................... #include <string.h> 
+.................... //////////////////////////////////////////////////////////////////////////// 
+.................... ////        (C) Copyright 1996,2008 Custom Computer Services            //// 
+.................... //// This source code may only be used by licensed users of the CCS C   //// 
+.................... //// compiler.  This source code may only be distributed to other       //// 
+.................... //// licensed users of the CCS C compiler.  No other use, reproduction  //// 
+.................... //// or distribution is permitted without written permission.           //// 
+.................... //// Derivative programs created using this software in object code     //// 
+.................... //// form are not restricted in any way.                                //// 
+.................... //////////////////////////////////////////////////////////////////////////// 
+....................  
+.................... #ifndef _STRING 
+.................... #define _STRING 
+.................... #include <stddef.h> 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... ////        (C) Copyright 1996,2003 Custom Computer Services           //// 
+.................... //// This source code may only be used by licensed users of the CCS C  //// 
+.................... //// compiler.  This source code may only be distributed to other      //// 
+.................... //// licensed users of the CCS C compiler.  No other use, reproduction //// 
+.................... //// or distribution is permitted without written permission.          //// 
+.................... //// Derivative programs created using this software in object code    //// 
+.................... //// form are not restricted in any way.                               //// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+....................  
+.................... #ifndef _STDDEF 
+....................  
+.................... #define _STDDEF 
+....................  
+.................... #if sizeof(unsigned int8 *)==1 
+.................... #define ptrdiff_t unsigned int8 
+.................... #else 
+.................... #define ptrdiff_t unsigned int16 
+.................... #endif 
+....................  
+.................... #if defined(__PCB__) 
+.................... #define size_t unsigned int8 
+.................... #else 
+.................... #define size_t unsigned int16 
+.................... #endif 
+.................... #define wchar_t char 
+.................... #define NULL 0 
+....................  
+.................... #define offsetof(s,f) (offsetofbit(s,f)/8) 
+....................  
+.................... #endif 
+....................  
+.................... #include <ctype.h> 
+.................... //////////////////////////////////////////////////////////////////////////// 
+.................... ////        (C) Copyright 1996,2003 Custom Computer Services            //// 
+.................... //// This source code may only be used by licensed users of the CCS C   //// 
+.................... //// compiler.  This source code may only be distributed to other       //// 
+.................... //// licensed users of the CCS C compiler.  No other use, reproduction  //// 
+.................... //// or distribution is permitted without written permission.           //// 
+.................... //// Derivative programs created using this software in object code     //// 
+.................... //// form are not restricted in any way.                                //// 
+.................... //////////////////////////////////////////////////////////////////////////// 
+....................  
+.................... #ifndef _CTYPE 
+.................... #define _CTYPE 
+....................  
+.................... #define islower(x)  isamong(x,"abcdefghijklmnopqrstuvwxyz") 
+.................... #define isupper(x)  isamong(x,"ABCDEFGHIJKLMNOPQRSTUVWXYZ") 
+.................... #define isalnum(x)  isamong(x,"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz") 
+.................... #define isalpha(x)  isamong(x,"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz") 
+.................... #define isdigit(x)  isamong(x,"0123456789") 
+.................... #define isspace(x)  ((x)==' ') 
+.................... #define isxdigit(x) isamong(x,"0123456789ABCDEFabcdef") 
+.................... #define iscntrl(x)  ((x)<' ') 
+.................... #define isprint(x)  ((x)>=' ') 
+.................... #define isgraph(x)  ((x)>' ') 
+.................... #define ispunct(x)  (((x)>' ')&&!isalnum(x)) 
+....................  
+.................... #endif 
+....................  
+....................  
+....................  
+....................  
+....................  
+.................... ////////////////////////////////////////////// 
+.................... //// Uncomment the following define to    //// 
+.................... //// allow some functions to use a        //// 
+.................... //// quicker algorithm, but use more ROM  //// 
+.................... ////                                      //// 
+.................... //// #define FASTER_BUT_MORE_ROM          //// 
+.................... ////////////////////////////////////////////// 
+....................  
+....................  
+....................  
+.................... /*Copying functions*/ 
+.................... /* standard template: 
+....................    void *memmove(void *s1, void *s2, size_t n). 
+....................    Copies max of n characters safely (not following ending '\0') 
+....................    from s2 in s1; if s2 has less than n characters, appends 0 */ 
+....................  
+.................... char *memmove(void *s1,char *s2,size_t n) 
+.................... { 
+....................    char *sc1; 
+....................    char *sc2; 
+....................    sc1=s1; 
+....................    sc2=s2; 
+....................    if(sc2<sc1 && sc1 <sc2 +n) 
+....................       for(sc1+=n,sc2+=n;0<n;--n) 
+....................          *--sc1=*--sc2; 
+....................    else 
+....................       for(;0<n;--n) 
+....................          *sc1++=*sc2++; 
+....................   return s1; 
+....................   } 
+....................  
+.................... /* Standard template: char *strcpy(char *s1, const char *s2) 
+....................    copies the string s2 including the null character to s1. 
+....................    This is a compiler built in to handle the different address 
+....................    spaces */ 
+....................  
+.................... #define strcopy strcpy 
+....................  
+.................... /* standard template: 
+....................    char *strncpy(char *s1, const char *s2, size_t n). 
+....................    Copies max of n characters (not following ending '\0') 
+....................    from s2 in s1; if s2 has less than n characters, appends 0 */ 
+....................  
+.................... char *strncpy(char *s1, char *s2, size_t n) 
+.................... { 
+....................   char *s; 
+....................  
+....................   for (s = s1; n > 0 && *s2 != '\0'; n--) 
+....................      *s++ = *s2++; 
+....................   for (; n > 0; n--) 
+....................      *s++ = '\0'; 
+....................  
+....................   return(s1); 
+.................... } 
+.................... /***********************************************************/ 
+....................  
+.................... /*concatenation functions*/ 
+.................... /* standard template: char *strcat(char *s1, const char *s2) 
+.................... appends s2 to s1*/ 
+....................  
+.................... char *strcat(char *s1, char *s2) 
+.................... { 
+....................    char *s; 
+....................  
+....................    for (s = s1; *s != '\0'; ++s); 
+....................    while(*s2 != '\0') 
+....................    { 
+....................       *s = *s2; 
+....................       ++s; 
+....................       ++s2; 
+....................    } 
+....................  
+....................    *s = '\0'; 
+....................    return(s1); 
+.................... } 
+.................... /* standard template: char *strncat(char *s1, char *s2,size_t n) 
+.................... appends not more than n characters from s2 to s1*/ 
+....................  
+.................... char *strncat(char *s1, char *s2, size_t n) 
+.................... { 
+....................    char *s; 
+....................  
+....................    for (s = s1; *s != '\0'; ++s); 
+....................    while(*s2 != '\0' && 0<n) 
+....................    { 
+....................       *s = *s2; 
+....................       ++s; 
+....................       ++s2; 
+....................       --n; 
+....................    } 
+....................  
+....................    *s = '\0'; 
+....................    return(s1); 
+.................... } 
+....................  
+.................... /***********************************************************/ 
+....................  
+....................  
+.................... /*comparison functions*/ 
+.................... /* standard template: signed int memcmp(void *s1, void *s2). 
+....................    Compares s1 & s2; returns -1 if s1<s2, 0 if s1=s2, 1 if s1>s2 */ 
+....................  
+.................... signed int8 memcmp(void * s1,char *s2,size_t n) 
+.................... { 
+.................... char *su1, *su2; 
+.................... for(su1=s1, su2=s2; 0<n; ++su1, ++su2, --n) 
+.................... { 
+....................    if(*su1!=*su2) 
+....................       return ((*su1<*su2)?-1:+1); 
+.................... } 
+.................... return 0; 
+.................... } 
+....................  
+.................... /* standard template: int strcmp(const char *s1, const char *s2). 
+....................    Compares s1 & s2; returns -1 if s1<s2, 0 if s1=s2, 1 if s1>s2 */ 
+....................  
+.................... signed int8 strcmp(char *s1, char *s2) 
+.................... { 
+....................    for (; *s1 == *s2; s1++, s2++) 
+....................       if (*s1 == '\0') 
+....................          return(0); 
+....................    return((*s1 < *s2) ? -1: 1); 
+.................... } 
+.................... /* standard template: int strcoll(const char *s1, const char *s2). 
+....................    Compares s1 & s2; returns -1 if s1<s2, 0 if s1=s2, 1 if s1>s2 */ 
+....................  
+.................... signed int8 strcoll(char *s1, char *s2) 
+.................... { 
+....................    for (; *s1 == *s2; s1++, s2++) 
+....................       if (*s1 == '\0') 
+....................          return(0); 
+....................    return((*s1 < *s2) ? -1: 1); 
+.................... } 
+....................  
+.................... /* standard template: 
+....................    int strncmp(const char *s1, const char *s2, size_t n). 
+....................    Compares max of n characters (not following 0) from s1 to s2; 
+....................    returns same as strcmp */ 
+....................  
+.................... signed int8 strncmp(char *s1, char *s2, size_t n) 
+.................... { 
+....................    for (; n > 0; s1++, s2++, n--) 
+....................       if (*s1 != *s2) 
+....................          return((*s1 <*s2) ? -1: 1); 
+....................       else if (*s1 == '\0') 
+....................          return(0); 
+....................    return(0); 
+.................... } 
+.................... /* standard template: 
+....................    int strxfrm(const char *s1, const char *s2, size_t n). 
+....................    transforms maximum of n characters from s2 and places them into s1*/ 
+.................... size_t strxfrm(char *s1, char *s2, size_t n) 
+.................... { 
+....................   char *s; 
+....................   unsigned int8 n1; 
+....................   n1=n; 
+....................   for (s = s1; n > 0 && *s2 != '\0'; n--) 
+....................      *s++ = *s2++; 
+....................   for (; n > 0; n--) 
+....................      *s++ = '\0'; 
+....................  
+....................   return(n1); 
+.................... } 
+....................  
+....................  
+....................  
+....................  
+....................  
+.................... /***********************************************************/ 
+.................... /*Search functions*/ 
+.................... /* standard template: void *memchr(const char *s, int c). 
+....................    Finds first occurrence of c in n characters of s */ 
+....................  
+.................... char *memchr(void *s,unsigned int8 c,size_t n) 
+.................... { 
+....................    char uc; 
+....................    char *su; 
+....................    uc=c; 
+....................    for(su=s;0<n;++su,--n) 
+....................       if(*su==uc) 
+....................       return su; 
+....................    return NULL; 
+.................... } 
+....................  
+.................... /* standard template: char *strchr(const char *s, int c). 
+....................    Finds first occurrence of c in s */ 
+....................  
+.................... char *strchr(char *s, unsigned int8 c) 
+.................... { 
+....................    for (; *s != c; s++) 
+....................       if (*s == '\0') 
+....................          return(0); 
+....................    return(s); 
+.................... } 
+.................... /* standard template: 
+....................    size_t strcspn(const char *s1, const char *s2). 
+....................    Computes length of max initial segment of s1 that 
+....................    consists entirely of characters NOT from s2*/ 
+....................  
+.................... unsigned int8  strcspn(char *s1, char *s2) 
+.................... { 
+....................    char *sc1, *sc2; 
+....................  
+....................    for (sc1 = s1; *sc1 != 0; sc1++) 
+....................       for (sc2 = s2; *sc2 != 0; sc2++) 
+....................          if (*sc1 == *sc2) 
+....................             return(sc1 - s1); 
+....................    return(sc1 - s1); 
+.................... } 
+.................... /* standard template: 
+....................    char *strpbrk(const char *s1, const char *s2). 
+....................    Locates first occurence of any character from s2 in s1; 
+....................    returns s1 if s2 is empty string */ 
+....................  
+.................... char *strpbrk(char *s1, char *s2) 
+.................... { 
+....................    char *sc1, *sc2; 
+....................  
+....................    for (sc1 = s1; *sc1 != 0; sc1++) 
+....................       for (sc2 = s2; *sc2 != 0; sc2++) 
+....................          if (*sc1 == *sc2) 
+....................             return(sc1); 
+....................    return(0); 
+.................... } 
+....................  
+....................  
+.................... /* standard template: char *strrchr(const char *s, int c). 
+....................    Finds last occurrence of c in s */ 
+....................  
+.................... char *strrchr(char *s, unsigned int8 c) 
+.................... { 
+....................    char *p; 
+....................  
+....................    for (p = 0; ; s++) 
+....................    { 
+....................       if (*s == c) 
+....................          p = s; 
+....................       if (*s == '\0') 
+....................          return(p); 
+....................    } 
+.................... } 
+.................... /* computes length of max initial segment of s1 consisting 
+....................    entirely of characters from s2 */ 
+....................  
+.................... unsigned int8  strspn(char *s1, char *s2) 
+.................... { 
+....................    char *sc1, *sc2; 
+....................  
+....................    for (sc1 = s1; *sc1 != 0; sc1++) 
+....................       for (sc2 = s2; ; sc2++) 
+....................     if (*sc2 == '\0') 
+....................        return(sc1 - s1); 
+....................          else if (*sc1 == *sc2) 
+....................             break; 
+....................    return(sc1 - s1); 
+.................... } 
+.................... /* standard template: 
+....................    char *strstr(const char *s1, const char *s2); 
+....................    Locates first occurence of character sequence s2 in s1; 
+....................    returns 0 if s2 is empty string 
+....................  
+....................    Uncomment #define FASTER_BUT_MORE_ROM at the top of the 
+....................    file to use the faster algorithm */ 
+.................... char *strstr(char *s1, char *s2) 
+.................... { 
+....................    char *s, *t; 
+....................  
+....................    #ifdef FASTER_BUT_MORE_ROM 
+....................    if (*s2 == '\0') 
+....................          return(s1); 
+....................    #endif 
+....................  
+....................    while (*s1) 
+....................    { 
+*
+0332:  MOVFF  237,03
+0336:  MOVLB  2
+0338:  MOVFF  236,FE9
+033C:  MOVFF  237,FEA
+0340:  MOVF   FEF,F
+0342:  BZ    03B6
+....................       for(s = s1, t = s2; *t && (*s == *t); ++s, ++t); 
+0344:  MOVFF  237,23B
+0348:  MOVFF  236,23A
+034C:  MOVFF  239,23D
+0350:  MOVFF  238,23C
+0354:  MOVFF  23D,03
+0358:  MOVFF  23C,FE9
+035C:  MOVFF  23D,FEA
+0360:  MOVF   FEF,F
+0362:  BZ    0390
+0364:  MOVFF  23A,FE9
+0368:  MOVFF  23B,FEA
+036C:  MOVFF  FEF,23E
+0370:  MOVFF  23D,03
+0374:  MOVFF  23C,FE9
+0378:  MOVFF  23D,FEA
+037C:  MOVF   FEF,W
+037E:  SUBWF  x3E,W
+0380:  BNZ   0390
+0382:  INCF   x3A,F
+0384:  BTFSC  FD8.2
+0386:  INCF   x3B,F
+0388:  INCF   x3C,F
+038A:  BTFSC  FD8.2
+038C:  INCF   x3D,F
+038E:  BRA    0354
+....................  
+....................       if (*t == '\0') 
+0390:  MOVFF  23D,03
+0394:  MOVFF  23C,FE9
+0398:  MOVFF  23D,FEA
+039C:  MOVF   FEF,F
+039E:  BNZ   03AA
+....................          return s1; 
+03A0:  MOVFF  236,01
+03A4:  MOVFF  237,02
+03A8:  BRA    03BC
+....................       ++s1; 
+03AA:  INCF   x36,F
+03AC:  BTFSC  FD8.2
+03AE:  INCF   x37,F
+....................       #ifdef FASTER_BUT_MORE_ROM 
+....................          while(*s1 != '\0' && *s1 != *s2) 
+....................             ++s1; 
+....................       #endif 
+....................    } 
+03B0:  MOVLB  0
+03B2:  BRA    0332
+03B4:  MOVLB  2
+....................    return 0; 
+03B6:  MOVLW  00
+03B8:  MOVWF  01
+03BA:  MOVWF  02
+.................... } 
+03BC:  MOVLB  0
+03BE:  RETURN 0
+....................  
+.................... /* standard template: char *strtok(char *s1, const char *s2). 
+....................  
+....................    Finds next token in s1 delimited by a character from separator 
+....................    string s2 (which can be different from call to call).  First call 
+....................    starts at beginning of s1 searching for first character NOT 
+....................    contained in s2; returns 0 if none is found. 
+....................    If one is found, it is the start of first token (return value). 
+....................    Function then searches from there for a character contained in s2. 
+....................    If none is found, current token extends to end of s1, and subsequent 
+....................    searches for a token will return 0.  If one is found, it is 
+....................    overwritten by '\0', which terminates current token.  Function saves 
+....................    pointer to following character from which next search will start. 
+....................    Each subsequent call, with 0 as first argument, starts searching 
+....................    from saved pointer */ 
+....................  
+.................... char *strtok(char *s1, char *s2) 
+.................... { 
+....................    char *beg, *end; 
+....................    static char *save; 
+....................  
+....................    beg = (s1)? s1: save; 
+....................    beg += strspn(beg, s2); 
+....................    if (*beg == '\0') 
+....................    { 
+....................       *save = ' '; 
+....................       return(0); 
+....................    } 
+....................    end = strpbrk(beg, s2); 
+....................    if (*end != '\0') 
+....................    { 
+....................       *end = '\0'; 
+....................       end++; 
+....................    } 
+....................    save = end; 
+....................    return(beg); 
+.................... } 
+....................  
+.................... /*****************************************************************/ 
+.................... /*Miscellaneous functions*/ 
+.................... /* standard template 
+.................... maps error number in errnum to an error message string 
+.................... Returns: Pointer to string 
+.................... */ 
+.................... #ifdef _ERRNO 
+.................... char * strerror(unsigned int8 errnum) 
+.................... { 
+.................... static char s[13]; 
+.................... switch( errnum) 
+.................... { 
+.................... case 0: 
+....................    strcpy(s,"no errors"); 
+....................    return s; 
+.................... case EDOM : 
+....................    strcpy(s,"domain error"); 
+....................    return s; 
+.................... case ERANGE: 
+....................    strcpy(s,"range error"); 
+....................    return s; 
+.................... } 
+.................... } 
+.................... #ENDIF 
+.................... /* standard template: size_t strlen(const char *s). 
+....................    Computes length of s1 (preceding terminating 0) */ 
+....................  
+.................... unsigned int8 strlen(char *s) 
+.................... { 
+....................    char *sc; 
+....................  
+....................    for (sc = s; *sc != 0; sc++); 
+....................    return(sc - s); 
+.................... } 
+....................  
+.................... /* standard template: size_t stricmp(const char *s1, const char *s2). 
+....................    Compares s1 to s2 ignoring case (upper vs. lower) */ 
+....................  
+.................... signed int8 stricmp(char *s1, char *s2) 
+.................... { 
+....................  for(; *s1==*s2||(isalpha(*s1)&&isalpha(*s2)&&(*s1==*s2+32||*s2==*s1+32)); 
+....................     s1++, s2++) 
+....................     if (*s1 == '\0') 
+....................        return(0); 
+....................  return((*s1 < *s2) ? -1: 1); 
+.................... } 
+....................  
+....................  
+.................... /* standard template: char *strlwr(char *s). 
+....................    Replaces uppercase letters by lowercase; 
+....................    returns pointer to new string s */ 
+....................  
+.................... char *strlwr(char *s) 
+.................... { 
+....................    char *p; 
+....................  
+....................    for (p = s; *p != '\0'; p++) 
+....................       if (*p >= 'A' && *p <='Z') 
+....................          *p += 'a' - 'A'; 
+....................    return(s); 
+.................... } 
+....................  
+.................... /* standard template: char *strupr(char *s). 
+....................    Replaces lowercase letters by upercase; 
+....................    returns pointer to new string s */ 
+....................  
+.................... char *strupr(char *s) 
+.................... { 
+....................    char *p; 
+....................  
+....................    for (p = s; *p != '\0'; p++) 
+....................       if (*p >= 'a' && *p <='z') 
+....................          *p -= 'a' - 'A'; 
+....................    return(s); 
+.................... } 
+....................  
+....................  
+.................... /************************************************************/ 
+....................  
+....................  
+.................... #endif 
+....................  
+.................... #include "Esp8266.c" 
+.................... #include "Typedefs.h" 
+.................... #ifndef __TYPEDEFS_H 
+.................... #define __TYPEDEFS_H 
+....................  
+.................... //#define NULL   '\0' 
+.................... typedef unsigned int8      uint8_t; 
+.................... typedef unsigned int16     uint16_t; 
+....................  
+.................... #endif 
+....................  
+....................  
+.................... #define ESP8266BUFFER_LENGHT 500 
+....................  
+.................... char Network_User_Pass[] = "\"MamiDroid\",\"sakaryali54\""; 
+....................  
+.................... char ESP8266Buf[ESP8266BUFFER_LENGHT]; 
+.................... static uint16_t ESPWriteIndex=0; 
+....................  
+.................... /*********************************************************** 
+.................... * Function Name  : Clear_ESPBuffer 
+.................... * Description    : Buffer temizlenir. 
+.................... * Input          : None 
+.................... * Return         : None 
+.................... ***********************************************************/ 
+.................... static void Clear_ESPBuffer(void) 
+.................... { 
+....................     uint16_t i; 
+....................  
+....................     for(i=0;i<ESP8266BUFFER_LENGHT;i++) 
+03C0:  MOVLB  2
+03C2:  CLRF   x37
+03C4:  CLRF   x36
+03C6:  MOVF   x37,W
+03C8:  SUBLW  01
+03CA:  BNC   03EA
+03CC:  BNZ   03D4
+03CE:  MOVF   x36,W
+03D0:  SUBLW  F3
+03D2:  BNC   03EA
+....................         ESP8266Buf[i] = 0; 
+03D4:  MOVLW  35
+03D6:  ADDWF  x36,W
+03D8:  MOVWF  FE9
+03DA:  MOVLW  00
+03DC:  ADDWFC x37,W
+03DE:  MOVWF  FEA
+03E0:  CLRF   FEF
+03E2:  INCF   x36,F
+03E4:  BTFSC  FD8.2
+03E6:  INCF   x37,F
+03E8:  BRA    03C6
+....................  
+....................     ESPWriteIndex=0; 
+03EA:  CLRF   x2A
+03EC:  CLRF   x29
+.................... } 
+03EE:  MOVLB  0
+03F0:  RETURN 0
+....................  
+.................... /*********************************************************** 
+.................... * Function Name  : ESP8266_Init 
+.................... * Description    : Modül bir aga baglanana kadar burada kalir. 
+.................... * Input          : None 
+.................... * Return         : None 
+.................... ***********************************************************/ 
+.................... static void ESP8266_Init(void) 
+.................... { 
+....................     static uint8_t ESPInitCase=0; 
+....................     char TempStr[10]; 
+....................     // Modul Reset Pini High yapiliyor. 
+....................     output_high(pin_b2); 
+*
+04B0:  MOVLW  FB
+04B2:  MOVWF  F93
+04B4:  BSF    F8A.2
+....................  
+....................     switch(ESPInitCase) 
+....................     { 
+04B6:  MOVLB  2
+04B8:  MOVF   x2B,W
+04BA:  ADDLW  F5
+04BC:  BTFSC  FD8.0
+04BE:  BRA    09F8
+04C0:  ADDLW  0B
+04C2:  MOVLB  0
+04C4:  GOTO   09FE
+....................         case 0: 
+....................             // Standart AT Komutu gonderilir , Cevabi OK olmalidir. 
+....................             fputs("AT\r\n",USART1); 
+04C8:  MOVLW  0A
+04CA:  MOVWF  FF6
+04CC:  MOVLW  01
+04CE:  MOVWF  FF7
+04D0:  RCALL  02E8
+04D2:  MOVLW  0D
+04D4:  BTFSS  F9E.4
+04D6:  BRA    04D4
+04D8:  MOVWF  FAD
+04DA:  MOVLW  0A
+04DC:  BTFSS  F9E.4
+04DE:  BRA    04DC
+04E0:  MOVWF  FAD
+....................             // 1 saniye gecikme koyuyoruz. 
+....................             delay_ms(1000); 
+04E2:  MOVLW  04
+04E4:  MOVLB  2
+04E6:  MOVWF  x36
+04E8:  MOVLW  FA
+04EA:  MOVWF  x37
+04EC:  MOVLB  0
+04EE:  RCALL  030A
+04F0:  MOVLB  2
+04F2:  DECFSZ x36,F
+04F4:  BRA    04E8
+....................             ESPInitCase = 1; 
+04F6:  MOVLW  01
+04F8:  MOVWF  x2B
+....................         break; 
+04FA:  BRA    09F8
+....................  
+....................         case 1: 
+....................             // STRSTR fonksiyonu metin icinde metin arayan bir fonksiyondur 
+....................             // Eger aranilan metni bulabilirse pointer adresi ile geri donus yapar 
+....................             // Bulamaz ise NULL dondurur. Bizde null'dan farklý mý diye sorariz. 
+....................             strcpy(TempStr,"OK"); 
+04FC:  MOVLW  02
+04FE:  MOVWF  FEA
+0500:  MOVLW  2C
+0502:  MOVWF  FE9
+0504:  MOVLW  00
+0506:  RCALL  00AE
+0508:  TBLRD*-
+050A:  TBLRD*+
+050C:  MOVF   FF5,W
+050E:  MOVWF  FEE
+0510:  IORLW  00
+0512:  BNZ   050A
+....................             if (strstr(ESP8266Buf,TempStr) != NULL) 
+0514:  MOVLB  2
+0516:  CLRF   x37
+0518:  MOVLW  35
+051A:  MOVWF  x36
+051C:  MOVLW  02
+051E:  MOVWF  x39
+0520:  MOVLW  2C
+0522:  MOVWF  x38
+0524:  MOVLB  0
+0526:  RCALL  0332
+0528:  MOVFF  02,237
+052C:  MOVFF  01,236
+0530:  MOVLB  2
+0532:  MOVF   x36,F
+0534:  BNZ   053A
+0536:  MOVF   x37,F
+0538:  BZ    0564
+....................             { 
+....................                 Clear_ESPBuffer(); 
+053A:  MOVLB  0
+053C:  RCALL  03C0
+....................                 fputs("Module Erisildi",USART2); 
+053E:  MOVLW  10
+0540:  MOVWF  FF6
+0542:  MOVLW  01
+0544:  MOVWF  FF7
+0546:  RCALL  043E
+0548:  MOVLW  0D
+054A:  MOVLB  2
+054C:  MOVWF  x38
+054E:  MOVLB  0
+0550:  RCALL  03F2
+0552:  MOVLW  0A
+0554:  MOVLB  2
+0556:  MOVWF  x38
+0558:  MOVLB  0
+055A:  RCALL  03F2
+....................                 ESPInitCase = 2; 
+055C:  MOVLW  02
+055E:  MOVLB  2
+0560:  MOVWF  x2B
+....................             } 
+....................             else 
+0562:  BRA    058A
+....................             { 
+....................                 Clear_ESPBuffer(); 
+0564:  MOVLB  0
+0566:  RCALL  03C0
+....................                 fputs("Modul Bulunamadi, Tekrar Deneniyor",USART2); 
+0568:  MOVLW  20
+056A:  MOVWF  FF6
+056C:  MOVLW  01
+056E:  MOVWF  FF7
+0570:  RCALL  043E
+0572:  MOVLW  0D
+0574:  MOVLB  2
+0576:  MOVWF  x38
+0578:  MOVLB  0
+057A:  RCALL  03F2
+057C:  MOVLW  0A
+057E:  MOVLB  2
+0580:  MOVWF  x38
+0582:  MOVLB  0
+0584:  RCALL  03F2
+....................                 ESPInitCase = 0; 
+0586:  MOVLB  2
+0588:  CLRF   x2B
+....................             } 
+....................         break; 
+058A:  BRA    09F8
+....................  
+....................         case 2: 
+....................             // Modulun 3 modu var gerekli bilgi datasheet'de biz 1 olmasini istiyoruz 
+....................             fputs("AT+CWMODE?\r\n",USART1); 
+058C:  MOVLW  44
+058E:  MOVWF  FF6
+0590:  MOVLW  01
+0592:  MOVWF  FF7
+0594:  RCALL  02E8
+0596:  MOVLW  0D
+0598:  BTFSS  F9E.4
+059A:  BRA    0598
+059C:  MOVWF  FAD
+059E:  MOVLW  0A
+05A0:  BTFSS  F9E.4
+05A2:  BRA    05A0
+05A4:  MOVWF  FAD
+....................             // 1 saniye gecikme koyuyoruz. 
+....................             delay_ms(1000); 
+05A6:  MOVLW  04
+05A8:  MOVLB  2
+05AA:  MOVWF  x36
+05AC:  MOVLW  FA
+05AE:  MOVWF  x37
+05B0:  MOVLB  0
+05B2:  RCALL  030A
+05B4:  MOVLB  2
+05B6:  DECFSZ x36,F
+05B8:  BRA    05AC
+....................             ESPInitCase = 3; 
+05BA:  MOVLW  03
+05BC:  MOVWF  x2B
+....................         break; 
+05BE:  BRA    09F8
+....................  
+....................         case 3: 
+....................             // Gelen cevap mode 1 'mi 
+....................             strcpy(TempStr,"+CWMODE:1"); 
+05C0:  MOVLW  02
+05C2:  MOVWF  FEA
+05C4:  MOVLW  2C
+05C6:  MOVWF  FE9
+05C8:  MOVLW  00
+05CA:  RCALL  00C2
+05CC:  TBLRD*-
+05CE:  TBLRD*+
+05D0:  MOVF   FF5,W
+05D2:  MOVWF  FEE
+05D4:  IORLW  00
+05D6:  BNZ   05CE
+....................             if (strstr(ESP8266Buf,TempStr) != NULL) 
+05D8:  MOVLB  2
+05DA:  CLRF   x37
+05DC:  MOVLW  35
+05DE:  MOVWF  x36
+05E0:  MOVLW  02
+05E2:  MOVWF  x39
+05E4:  MOVLW  2C
+05E6:  MOVWF  x38
+05E8:  MOVLB  0
+05EA:  RCALL  0332
+05EC:  MOVFF  02,237
+05F0:  MOVFF  01,236
+05F4:  MOVLB  2
+05F6:  MOVF   x36,F
+05F8:  BNZ   05FE
+05FA:  MOVF   x37,F
+05FC:  BZ    0628
+....................             { 
+....................                 Clear_ESPBuffer(); 
+05FE:  MOVLB  0
+0600:  RCALL  03C0
+....................                 fputs("MODE Ayar Dogru",USART2); 
+0602:  MOVLW  52
+0604:  MOVWF  FF6
+0606:  MOVLW  01
+0608:  MOVWF  FF7
+060A:  RCALL  043E
+060C:  MOVLW  0D
+060E:  MOVLB  2
+0610:  MOVWF  x38
+0612:  MOVLB  0
+0614:  RCALL  03F2
+0616:  MOVLW  0A
+0618:  MOVLB  2
+061A:  MOVWF  x38
+061C:  MOVLB  0
+061E:  RCALL  03F2
+....................                 ESPInitCase = 4; 
+0620:  MOVLW  04
+0622:  MOVLB  2
+0624:  MOVWF  x2B
+....................             } 
+....................             else 
+0626:  BRA    0698
+....................             { 
+....................                 // Fabrika ayarlarý olarak 2 geliyor biz onu 1 yapip reset komutu ile tamamlariz. 
+....................                 fputs("AT+CWMODE=1\r\n",USART1); 
+0628:  MOVLW  62
+062A:  MOVWF  FF6
+062C:  MOVLW  01
+062E:  MOVWF  FF7
+0630:  MOVLB  0
+0632:  RCALL  02E8
+0634:  MOVLW  0D
+0636:  BTFSS  F9E.4
+0638:  BRA    0636
+063A:  MOVWF  FAD
+063C:  MOVLW  0A
+063E:  BTFSS  F9E.4
+0640:  BRA    063E
+0642:  MOVWF  FAD
+....................                 fputs("AT+RST\r\n",USART1); 
+0644:  MOVLW  70
+0646:  MOVWF  FF6
+0648:  MOVLW  01
+064A:  MOVWF  FF7
+064C:  RCALL  02E8
+064E:  MOVLW  0D
+0650:  BTFSS  F9E.4
+0652:  BRA    0650
+0654:  MOVWF  FAD
+0656:  MOVLW  0A
+0658:  BTFSS  F9E.4
+065A:  BRA    0658
+065C:  MOVWF  FAD
+....................                 delay_ms(1000); 
+065E:  MOVLW  04
+0660:  MOVLB  2
+0662:  MOVWF  x36
+0664:  MOVLW  FA
+0666:  MOVWF  x37
+0668:  MOVLB  0
+066A:  RCALL  030A
+066C:  MOVLB  2
+066E:  DECFSZ x36,F
+0670:  BRA    0664
+....................  
+....................                 Clear_ESPBuffer(); 
+0672:  MOVLB  0
+0674:  RCALL  03C0
+....................                 fputs("MOD Degistirilir.",USART2); 
+0676:  MOVLW  7A
+0678:  MOVWF  FF6
+067A:  MOVLW  01
+067C:  MOVWF  FF7
+067E:  RCALL  043E
+0680:  MOVLW  0D
+0682:  MOVLB  2
+0684:  MOVWF  x38
+0686:  MOVLB  0
+0688:  RCALL  03F2
+068A:  MOVLW  0A
+068C:  MOVLB  2
+068E:  MOVWF  x38
+0690:  MOVLB  0
+0692:  RCALL  03F2
+....................                 ESPInitCase = 0; 
+0694:  MOVLB  2
+0696:  CLRF   x2B
+....................             } 
+....................         break; 
+0698:  BRA    09F8
+....................  
+....................         case 4: 
+....................             // Baglanilacak olan wifi agina ait kullanici adi ve sifre girisi yapilir. 
+....................             fprintf(USART1,"AT+CWJAP=%s\r\n",Network_User_Pass); 
+069A:  MOVLW  8C
+069C:  MOVWF  FF6
+069E:  MOVLW  01
+06A0:  MOVWF  FF7
+06A2:  MOVLW  09
+06A4:  MOVLB  2
+06A6:  MOVWF  x36
+06A8:  MOVLB  0
+06AA:  BRA    045E
+06AC:  CLRF   FEA
+06AE:  MOVLW  1B
+06B0:  MOVWF  FE9
+06B2:  RCALL  048A
+06B4:  MOVLW  0D
+06B6:  BTFSS  F9E.4
+06B8:  BRA    06B6
+06BA:  MOVWF  FAD
+06BC:  MOVLW  0A
+06BE:  BTFSS  F9E.4
+06C0:  BRA    06BE
+06C2:  MOVWF  FAD
+....................             // 1 saniye gecikme koyuyoruz. 
+....................             delay_ms(1000); 
+06C4:  MOVLW  04
+06C6:  MOVLB  2
+06C8:  MOVWF  x36
+06CA:  MOVLW  FA
+06CC:  MOVWF  x37
+06CE:  MOVLB  0
+06D0:  RCALL  030A
+06D2:  MOVLB  2
+06D4:  DECFSZ x36,F
+06D6:  BRA    06CA
+....................             ESPInitCase = 5; 
+06D8:  MOVLW  05
+06DA:  MOVWF  x2B
+....................         break; 
+06DC:  BRA    09F8
+....................  
+....................          case 5: 
+....................              // Baglanti saglandiginde OK Cevabi alinir 
+....................             strcpy(TempStr,"OK"); 
+06DE:  MOVLW  02
+06E0:  MOVWF  FEA
+06E2:  MOVLW  2C
+06E4:  MOVWF  FE9
+06E6:  MOVLW  00
+06E8:  RCALL  00AE
+06EA:  TBLRD*-
+06EC:  TBLRD*+
+06EE:  MOVF   FF5,W
+06F0:  MOVWF  FEE
+06F2:  IORLW  00
+06F4:  BNZ   06EC
+....................             if (strstr(ESP8266Buf,TempStr) != NULL) 
+06F6:  MOVLB  2
+06F8:  CLRF   x37
+06FA:  MOVLW  35
+06FC:  MOVWF  x36
+06FE:  MOVLW  02
+0700:  MOVWF  x39
+0702:  MOVLW  2C
+0704:  MOVWF  x38
+0706:  MOVLB  0
+0708:  RCALL  0332
+070A:  MOVFF  02,237
+070E:  MOVFF  01,236
+0712:  MOVLB  2
+0714:  MOVF   x36,F
+0716:  BNZ   071C
+0718:  MOVF   x37,F
+071A:  BZ    0746
+....................             { 
+....................                 Clear_ESPBuffer(); 
+071C:  MOVLB  0
+071E:  RCALL  03C0
+....................                 fputs("Modeme Baglanti yapildi",USART2); 
+0720:  MOVLW  9A
+0722:  MOVWF  FF6
+0724:  MOVLW  01
+0726:  MOVWF  FF7
+0728:  RCALL  043E
+072A:  MOVLW  0D
+072C:  MOVLB  2
+072E:  MOVWF  x38
+0730:  MOVLB  0
+0732:  RCALL  03F2
+0734:  MOVLW  0A
+0736:  MOVLB  2
+0738:  MOVWF  x38
+073A:  MOVLB  0
+073C:  RCALL  03F2
+....................                 ESPInitCase = 6; 
+073E:  MOVLW  06
+0740:  MOVLB  2
+0742:  MOVWF  x2B
+....................             } 
+....................             else 
+0744:  BRA    077A
+....................             { 
+....................                 delay_ms(1000); 
+0746:  MOVLW  04
+0748:  MOVWF  x36
+074A:  MOVLW  FA
+074C:  MOVWF  x37
+074E:  MOVLB  0
+0750:  RCALL  030A
+0752:  MOVLB  2
+0754:  DECFSZ x36,F
+0756:  BRA    074A
+....................                 fputs("Baglanti Bekleniyor.",USART2); 
+0758:  MOVLW  B2
+075A:  MOVWF  FF6
+075C:  MOVLW  01
+075E:  MOVWF  FF7
+0760:  MOVLB  0
+0762:  RCALL  043E
+0764:  MOVLW  0D
+0766:  MOVLB  2
+0768:  MOVWF  x38
+076A:  MOVLB  0
+076C:  RCALL  03F2
+076E:  MOVLW  0A
+0770:  MOVLB  2
+0772:  MOVWF  x38
+0774:  MOVLB  0
+0776:  RCALL  03F2
+0778:  MOVLB  2
+....................             } 
+....................         break; 
+077A:  BRA    09F8
+....................  
+....................         case 6: 
+....................             // IP adresi nedir diye soruyoruz ? 
+....................             fputs("AT+CIFSR\r\n",USART1); 
+077C:  MOVLW  C8
+077E:  MOVWF  FF6
+0780:  MOVLW  01
+0782:  MOVWF  FF7
+0784:  RCALL  02E8
+0786:  MOVLW  0D
+0788:  BTFSS  F9E.4
+078A:  BRA    0788
+078C:  MOVWF  FAD
+078E:  MOVLW  0A
+0790:  BTFSS  F9E.4
+0792:  BRA    0790
+0794:  MOVWF  FAD
+....................             // 1 saniye gecikme koyuyoruz. 
+....................             delay_ms(1000); 
+0796:  MOVLW  04
+0798:  MOVLB  2
+079A:  MOVWF  x36
+079C:  MOVLW  FA
+079E:  MOVWF  x37
+07A0:  MOVLB  0
+07A2:  RCALL  030A
+07A4:  MOVLB  2
+07A6:  DECFSZ x36,F
+07A8:  BRA    079C
+....................             ESPInitCase = 7; 
+07AA:  MOVLW  07
+07AC:  MOVWF  x2B
+....................         break; 
+07AE:  BRA    09F8
+....................  
+....................         case 7: 
+....................             // IP alana kadar error bilgisi gonderir. Onu ayýrýrýz. =) 
+....................             strcpy(TempStr,"ERROR"); 
+07B0:  MOVLW  02
+07B2:  MOVWF  FEA
+07B4:  MOVLW  2C
+07B6:  MOVWF  FE9
+07B8:  MOVLW  00
+07BA:  RCALL  00DC
+07BC:  TBLRD*-
+07BE:  TBLRD*+
+07C0:  MOVF   FF5,W
+07C2:  MOVWF  FEE
+07C4:  IORLW  00
+07C6:  BNZ   07BE
+....................             if (strstr(ESP8266Buf,TempStr) == NULL) 
+07C8:  MOVLB  2
+07CA:  CLRF   x37
+07CC:  MOVLW  35
+07CE:  MOVWF  x36
+07D0:  MOVLW  02
+07D2:  MOVWF  x39
+07D4:  MOVLW  2C
+07D6:  MOVWF  x38
+07D8:  MOVLB  0
+07DA:  RCALL  0332
+07DC:  MOVFF  02,237
+07E0:  MOVFF  01,236
+07E4:  MOVLB  2
+07E6:  MOVF   x36,F
+07E8:  BNZ   0830
+07EA:  MOVF   x37,F
+07EC:  BNZ   0830
+....................             { 
+....................                 fputs("Alinan IP = ",USART2); 
+07EE:  MOVLW  D4
+07F0:  MOVWF  FF6
+07F2:  MOVLW  01
+07F4:  MOVWF  FF7
+07F6:  MOVLB  0
+07F8:  RCALL  043E
+07FA:  MOVLW  0D
+07FC:  MOVLB  2
+07FE:  MOVWF  x38
+0800:  MOVLB  0
+0802:  RCALL  03F2
+0804:  MOVLW  0A
+0806:  MOVLB  2
+0808:  MOVWF  x38
+080A:  MOVLB  0
+080C:  RCALL  03F2
+....................                 // Gelen bilginin 11.karakterinden itibaren IP adresi yaziyor. 
+....................                 fputs(&ESP8266Buf[11],USART1); 
+080E:  CLRF   FEA
+0810:  MOVLW  40
+0812:  MOVWF  FE9
+0814:  RCALL  048A
+0816:  MOVLW  0D
+0818:  BTFSS  F9E.4
+081A:  BRA    0818
+081C:  MOVWF  FAD
+081E:  MOVLW  0A
+0820:  BTFSS  F9E.4
+0822:  BRA    0820
+0824:  MOVWF  FAD
+....................                 Clear_ESPBuffer(); 
+0826:  RCALL  03C0
+....................                 ESPInitCase=8; 
+0828:  MOVLW  08
+082A:  MOVLB  2
+082C:  MOVWF  x2B
+....................             } 
+....................             else 
+082E:  BRA    086A
+....................             { 
+....................                 // ERROR der ise tekrar dene 
+....................                 delay_ms(1000); 
+0830:  MOVLW  04
+0832:  MOVWF  x36
+0834:  MOVLW  FA
+0836:  MOVWF  x37
+0838:  MOVLB  0
+083A:  RCALL  030A
+083C:  MOVLB  2
+083E:  DECFSZ x36,F
+0840:  BRA    0834
+....................                 fputs("Tekrar Dene.",USART2); 
+0842:  MOVLW  E2
+0844:  MOVWF  FF6
+0846:  MOVLW  01
+0848:  MOVWF  FF7
+084A:  MOVLB  0
+084C:  RCALL  043E
+084E:  MOVLW  0D
+0850:  MOVLB  2
+0852:  MOVWF  x38
+0854:  MOVLB  0
+0856:  RCALL  03F2
+0858:  MOVLW  0A
+085A:  MOVLB  2
+085C:  MOVWF  x38
+085E:  MOVLB  0
+0860:  RCALL  03F2
+....................                 Clear_ESPBuffer(); 
+0862:  RCALL  03C0
+....................                 ESPInitCase=6; 
+0864:  MOVLW  06
+0866:  MOVLB  2
+0868:  MOVWF  x2B
+....................             } 
+....................  
+....................         break; 
+086A:  BRA    09F8
+....................  
+....................         case 8: 
+....................             // Baglanilacak siteye ait bilgiler girildi. 
+....................             fputs("AT+CIPSTART=\"TCP\",\"www.picproje.org\",80\r\n",USART1); 
+086C:  MOVLW  F0
+086E:  MOVWF  FF6
+0870:  MOVLW  01
+0872:  MOVWF  FF7
+0874:  RCALL  02E8
+0876:  MOVLW  0D
+0878:  BTFSS  F9E.4
+087A:  BRA    0878
+087C:  MOVWF  FAD
+087E:  MOVLW  0A
+0880:  BTFSS  F9E.4
+0882:  BRA    0880
+0884:  MOVWF  FAD
+....................             // 1 saniye gecikme koyuyoruz. 
+....................             delay_ms(1000); 
+0886:  MOVLW  04
+0888:  MOVLB  2
+088A:  MOVWF  x36
+088C:  MOVLW  FA
+088E:  MOVWF  x37
+0890:  MOVLB  0
+0892:  RCALL  030A
+0894:  MOVLB  2
+0896:  DECFSZ x36,F
+0898:  BRA    088C
+....................             ESPInitCase = 9; 
+089A:  MOVLW  09
+089C:  MOVWF  x2B
+....................         break; 
+089E:  BRA    09F8
+....................  
+....................         case 9: 
+....................             // Baglanti kuruldugunda Linked diye bir cevap aliriz. 
+....................             strcpy(TempStr,"Linked"); 
+08A0:  MOVLW  02
+08A2:  MOVWF  FEA
+08A4:  MOVLW  2C
+08A6:  MOVWF  FE9
+08A8:  MOVLW  00
+08AA:  RCALL  00F2
+08AC:  TBLRD*-
+08AE:  TBLRD*+
+08B0:  MOVF   FF5,W
+08B2:  MOVWF  FEE
+08B4:  IORLW  00
+08B6:  BNZ   08AE
+....................             if (strstr(ESP8266Buf,TempStr) != NULL) 
+08B8:  MOVLB  2
+08BA:  CLRF   x37
+08BC:  MOVLW  35
+08BE:  MOVWF  x36
+08C0:  MOVLW  02
+08C2:  MOVWF  x39
+08C4:  MOVLW  2C
+08C6:  MOVWF  x38
+08C8:  MOVLB  0
+08CA:  RCALL  0332
+08CC:  MOVFF  02,237
+08D0:  MOVFF  01,236
+08D4:  MOVLB  2
+08D6:  MOVF   x36,F
+08D8:  BNZ   08DE
+08DA:  MOVF   x37,F
+08DC:  BZ    0908
+....................             { 
+....................                 Clear_ESPBuffer(); 
+08DE:  MOVLB  0
+08E0:  RCALL  03C0
+....................                 fputs("Server ile baglanti kuruldu",USART2); 
+08E2:  MOVLW  1A
+08E4:  MOVWF  FF6
+08E6:  MOVLW  02
+08E8:  MOVWF  FF7
+08EA:  RCALL  043E
+08EC:  MOVLW  0D
+08EE:  MOVLB  2
+08F0:  MOVWF  x38
+08F2:  MOVLB  0
+08F4:  RCALL  03F2
+08F6:  MOVLW  0A
+08F8:  MOVLB  2
+08FA:  MOVWF  x38
+08FC:  MOVLB  0
+08FE:  RCALL  03F2
+....................                 ESPInitCase = 10; 
+0900:  MOVLW  0A
+0902:  MOVLB  2
+0904:  MOVWF  x2B
+....................             } 
+....................             else 
+0906:  BRA    093C
+....................             { 
+....................                 // Cevap gelene kadar bekler 
+....................                 delay_ms(1000); 
+0908:  MOVLW  04
+090A:  MOVWF  x36
+090C:  MOVLW  FA
+090E:  MOVWF  x37
+0910:  MOVLB  0
+0912:  RCALL  030A
+0914:  MOVLB  2
+0916:  DECFSZ x36,F
+0918:  BRA    090C
+....................                 fputs("Baglanti Bekleniyor.",USART2); 
+091A:  MOVLW  36
+091C:  MOVWF  FF6
+091E:  MOVLW  02
+0920:  MOVWF  FF7
+0922:  MOVLB  0
+0924:  RCALL  043E
+0926:  MOVLW  0D
+0928:  MOVLB  2
+092A:  MOVWF  x38
+092C:  MOVLB  0
+092E:  RCALL  03F2
+0930:  MOVLW  0A
+0932:  MOVLB  2
+0934:  MOVWF  x38
+0936:  MOVLB  0
+0938:  RCALL  03F2
+093A:  MOVLB  2
+....................             } 
+....................         break; 
+093C:  BRA    09F8
+....................  
+....................         case 10: 
+....................             // Artýk HTTP Request bilgimizi gonderebiliriz. 
+....................             // CIPSEND ile kac byte bilgi gondereceksek o kadar yazarýz. 
+....................             fputs("AT+CIPSEND=100\r\n",USART1); 
+093E:  MOVLW  4C
+0940:  MOVWF  FF6
+0942:  MOVLW  02
+0944:  MOVWF  FF7
+0946:  RCALL  02E8
+0948:  MOVLW  0D
+094A:  BTFSS  F9E.4
+094C:  BRA    094A
+094E:  MOVWF  FAD
+0950:  MOVLW  0A
+0952:  BTFSS  F9E.4
+0954:  BRA    0952
+0956:  MOVWF  FAD
+....................             // Komutu verdikten sonra bize '>' bilgisi geliyor. 
+....................             delay_ms(1000); 
+0958:  MOVLW  04
+095A:  MOVLB  2
+095C:  MOVWF  x36
+095E:  MOVLW  FA
+0960:  MOVWF  x37
+0962:  MOVLB  0
+0964:  RCALL  030A
+0966:  MOVLB  2
+0968:  DECFSZ x36,F
+096A:  BRA    095E
+....................             // HTTP Request Hazirlanir. 
+....................             fputs("GET / HTTP/1.1\r\n"USART1); 
+096C:  MOVLW  5E
+096E:  MOVWF  FF6
+0970:  MOVLW  02
+0972:  MOVWF  FF7
+0974:  MOVLB  0
+0976:  RCALL  02E8
+0978:  MOVLW  0D
+097A:  BTFSS  F9E.4
+097C:  BRA    097A
+097E:  MOVWF  FAD
+0980:  MOVLW  0A
+0982:  BTFSS  F9E.4
+0984:  BRA    0982
+0986:  MOVWF  FAD
+....................             fputs("Host: www.picproje.org\r\n",USART1); 
+0988:  MOVLW  70
+098A:  MOVWF  FF6
+098C:  MOVLW  02
+098E:  MOVWF  FF7
+0990:  RCALL  02E8
+0992:  MOVLW  0D
+0994:  BTFSS  F9E.4
+0996:  BRA    0994
+0998:  MOVWF  FAD
+099A:  MOVLW  0A
+099C:  BTFSS  F9E.4
+099E:  BRA    099C
+09A0:  MOVWF  FAD
+....................             fputs("Accept: */*\r\n",USART1); 
+09A2:  MOVLW  8A
+09A4:  MOVWF  FF6
+09A6:  MOVLW  02
+09A8:  MOVWF  FF7
+09AA:  RCALL  02E8
+09AC:  MOVLW  0D
+09AE:  BTFSS  F9E.4
+09B0:  BRA    09AE
+09B2:  MOVWF  FAD
+09B4:  MOVLW  0A
+09B6:  BTFSS  F9E.4
+09B8:  BRA    09B6
+09BA:  MOVWF  FAD
+....................             fputs("Content-Type: text/html\r\n",USART1); 
+09BC:  MOVLW  98
+09BE:  MOVWF  FF6
+09C0:  MOVLW  02
+09C2:  MOVWF  FF7
+09C4:  RCALL  02E8
+09C6:  MOVLW  0D
+09C8:  BTFSS  F9E.4
+09CA:  BRA    09C8
+09CC:  MOVWF  FAD
+09CE:  MOVLW  0A
+09D0:  BTFSS  F9E.4
+09D2:  BRA    09D0
+09D4:  MOVWF  FAD
+....................             fputs("Content-Length: 0\r\n\r\n\r\n",USART1); 
+09D6:  MOVLW  B2
+09D8:  MOVWF  FF6
+09DA:  MOVLW  02
+09DC:  MOVWF  FF7
+09DE:  RCALL  02E8
+09E0:  MOVLW  0D
+09E2:  BTFSS  F9E.4
+09E4:  BRA    09E2
+09E6:  MOVWF  FAD
+09E8:  MOVLW  0A
+09EA:  BTFSS  F9E.4
+09EC:  BRA    09EA
+09EE:  MOVWF  FAD
+....................  
+....................             // Buradan sonra http request'e gelen cevaplari degerlendirerek 
+....................             // Ne yapmak istiyorsanýz onu yapabilirsiniz =) 
+....................              
+....................             while(1); 
+09F0:  BRA    09F0
+....................         break; 
+09F2:  MOVLB  2
+09F4:  BRA    09F8
+09F6:  MOVLB  2
+....................  
+....................     } 
+.................... } 
+09F8:  MOVLB  0
+09FA:  GOTO   0AE6 (RETURN)
+....................  
+....................  
+....................  
+.................... extern char ESP8266Buf[ESP8266BUFFER_LENGHT]; 
+....................  
+.................... #int_RDA 
+.................... void  RDA_isr(void)  
+.................... { 
+....................    gets(ESP8266Buf); 
+*
+02CA:  CLRF   FEA
+02CC:  MOVLW  35
+02CE:  MOVWF  FE9
+02D0:  DECF   FE9,F
+02D2:  BTFSS  F9E.5
+02D4:  BRA    02D2
+02D6:  MOVFF  FAE,FEC
+02DA:  MOVLW  0D
+02DC:  SUBWF  FEF,W
+02DE:  BNZ   02D2
+02E0:  CLRF   FEC
+.................... } 
+....................  
+....................  
+....................  
+02E2:  BCF    F9E.5
+02E4:  GOTO   0060
+.................... void main() 
+.................... { 
+*
+0A2E:  CLRF   FF8
+0A30:  BCF    FD0.7
+0A32:  BSF    07.7
+0A34:  CLRF   FEA
+0A36:  CLRF   FE9
+0A38:  BSF    FB8.3
+0A3A:  MOVLW  10
+0A3C:  MOVWF  FAF
+0A3E:  MOVLW  00
+0A40:  MOVWF  FB0
+0A42:  MOVLW  A6
+0A44:  MOVWF  FAC
+0A46:  MOVLW  90
+0A48:  MOVWF  FAB
+0A4A:  NOP   
+0A4C:  NOP   
+0A4E:  BCF    F94.5
+0A50:  BSF    F8B.5
+0A52:  MOVLB  2
+0A54:  CLRF   x2A
+0A56:  CLRF   x29
+0A58:  CLRF   x2B
+0A5A:  MOVF   FC1,W
+0A5C:  ANDLW  C0
+0A5E:  IORLW  0F
+0A60:  MOVWF  FC1
+0A62:  MOVLW  07
+0A64:  MOVWF  FB4
+0A66:  CLRF   19
+0A68:  CLRF   1A
+0A6A:  MOVLW  22
+0A6C:  MOVWF  1B
+0A6E:  MOVLW  4D
+0A70:  MOVWF  1C
+0A72:  MOVLW  61
+0A74:  MOVWF  1D
+0A76:  MOVLW  6D
+0A78:  MOVWF  1E
+0A7A:  MOVLW  69
+0A7C:  MOVWF  1F
+0A7E:  MOVLW  44
+0A80:  MOVWF  20
+0A82:  MOVLW  72
+0A84:  MOVWF  21
+0A86:  MOVLW  6F
+0A88:  MOVWF  22
+0A8A:  MOVLW  69
+0A8C:  MOVWF  23
+0A8E:  MOVLW  64
+0A90:  MOVWF  24
+0A92:  MOVLW  22
+0A94:  MOVWF  25
+0A96:  MOVLW  2C
+0A98:  MOVWF  26
+0A9A:  MOVLW  22
+0A9C:  MOVWF  27
+0A9E:  MOVLW  73
+0AA0:  MOVWF  28
+0AA2:  MOVLW  61
+0AA4:  MOVWF  29
+0AA6:  MOVLW  6B
+0AA8:  MOVWF  2A
+0AAA:  MOVLW  61
+0AAC:  MOVWF  2B
+0AAE:  MOVLW  72
+0AB0:  MOVWF  2C
+0AB2:  MOVLW  79
+0AB4:  MOVWF  2D
+0AB6:  MOVLW  61
+0AB8:  MOVWF  2E
+0ABA:  MOVLW  6C
+0ABC:  MOVWF  2F
+0ABE:  MOVLW  69
+0AC0:  MOVWF  30
+0AC2:  MOVLW  35
+0AC4:  MOVWF  31
+0AC6:  MOVLW  34
+0AC8:  MOVWF  32
+0ACA:  MOVLW  22
+0ACC:  MOVWF  33
+0ACE:  CLRF   34
+....................    setup_timer_3(T3_DISABLED | T3_DIV_BY_1); 
+0AD0:  CLRF   FB1
+....................  
+....................    enable_interrupts(INT_RDA); 
+0AD2:  BSF    F9D.5
+....................    enable_interrupts(GLOBAL); 
+0AD4:  MOVLW  C0
+0AD6:  IORWF  FF2,F
+....................    setup_oscillator(OSC_8MHZ|OSC_NORMAL|OSC_31250|OSC_PLL_ON); 
+0AD8:  MOVLW  70
+0ADA:  MOVWF  FD3
+0ADC:  MOVLW  C0
+0ADE:  MOVWF  F9B
+0AE0:  MOVF   FD3,W
+....................  
+....................    while(TRUE) 
+....................    { 
+....................       //TODO: User Code 
+....................       ESP8266_Init(); 
+0AE2:  MOVLB  0
+0AE4:  BRA    04B0
+....................    } 
+0AE6:  BRA    0AE4
+....................  
+.................... } 
+0AE8:  SLEEP 
+
+Configuration Fuses:
+   Word  1: C100   XT FCMEN IESO
+   Word  2: 0E18   PUT NOBROWNOUT BORV21 NOWDT WDT128
+   Word  3: 8100   CCP2C1 NOPBADEN NOLPT1OSC MCLR
+   Word  4: 0081   STVREN NOLVP NOXINST NODEBUG
+   Word  5: C00F   NOPROTECT NOCPB NOCPD
+   Word  6: E00F   NOWRT NOWRTC NOWRTB NOWRTD
+   Word  7: 400F   NOEBTR NOEBTRB
